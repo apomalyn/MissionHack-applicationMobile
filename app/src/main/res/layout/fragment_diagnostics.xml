@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/lib/com.codets.hearthattack"
     tools:context=".DiagnosticsFragment">
 
     <ListView
@@ -18,9 +17,17 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="@dimen/fab_margin_right"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginRight="@dimen/fab_margin_right"
         android:background="@color/colorPrimary"
-        app:srcCompact="@drawable/ic_send" />
+        android:src="@drawable/ic_send" />
 
+    <RelativeLayout
+        android:id="@+id/loading_panel"
+        android:clickable="false"
+        android:visibility="gone"
+        style="@style/GenericProgressBackground">
+
+        <ProgressBar style="@style/GenericProgressIndicator" />
+    </RelativeLayout>
 </FrameLayout>
