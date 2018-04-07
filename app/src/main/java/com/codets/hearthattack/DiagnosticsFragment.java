@@ -1,13 +1,26 @@
 package com.codets.hearthattack;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -19,19 +32,22 @@ import android.widget.Toast;
  * create an instance of this fragment.
  */
 public class DiagnosticsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String SYMPTOM_LIST_FILENAME = "symptoms.json";
+
+    private static ArrayList<Symptom> symptomsList = null;
+    private static SymptomsAdapter symptomsAdapter = null;
+    private static ArrayList<Symptom> currentSymptom;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
+
 
     private OnFragmentInteractionListener mListener;
 
     public DiagnosticsFragment() {
-        // Required empty public constructor
+        currentSymptom = new ArrayList<>();
     }
 
     /**
@@ -46,8 +62,6 @@ public class DiagnosticsFragment extends Fragment {
     public static DiagnosticsFragment newInstance(String param1, String param2) {
         DiagnosticsFragment fragment = new DiagnosticsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,17 +69,15 @@ public class DiagnosticsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_diagnostics, container, false);
+        this.view = inflater.inflate(R.layout.fragment_diagnostics, container, false);
+        displayListView();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,6 +101,70 @@ public class DiagnosticsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void displayListView() {
+        //Array list of countries
+        if(symptomsList == null){
+            try {
+                symptomsList = new ArrayList<>();
+                JSONObject obj = new JSONObject(AssetJSONFile(getContext()));
+                JSONObject m_jArry = obj.getJSONObject("symptoms");
+                String key;
+                JSONObject jo_inside;
+
+                Iterator<?> keys = m_jArry.keys();
+
+                while(keys.hasNext()){
+                    key = (String)keys.next();
+                    symptomsList.add(new Symptom(Integer.parseInt(key), m_jArry.getString(key)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            } catch (IOException e){
+                e.printStackTrace();
+                return;
+            }
+        }
+
+        if(symptomsAdapter == null){
+            symptomsAdapter = new SymptomsAdapter(getContext(),
+                    R.layout.symptom_layout, symptomsList);
+        }
+
+        //create an ArrayAdaptar from the String Array
+        ListView listView;
+
+        try{
+            listView = (ListView)view.findViewById(R.id.list_symptoms);
+            listView.setAdapter(symptomsAdapter);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            return;
+        }
+        // Assign adapter to ListView
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // When clicked, show a toast with the TextView text
+                Symptom symptom= (Symptom) parent.getItemAtPosition(position);
+                currentSymptom.add(symptom);
+            }
+        });
+
+    }
+
+    public static String AssetJSONFile (Context context) throws IOException {
+        AssetManager manager = context.getAssets();
+        InputStream file = manager.open(DiagnosticsFragment.SYMPTOM_LIST_FILENAME);
+        byte[] formArray = new byte[file.available()];
+        file.read(formArray);
+        file.close();
+
+        return new String(formArray);
     }
 
     /**
