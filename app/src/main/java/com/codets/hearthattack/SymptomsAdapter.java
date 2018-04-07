@@ -49,10 +49,6 @@ public class SymptomsAdapter extends ArrayAdapter<Symptom> {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v;
                     Symptom symptom = (Symptom) cb.getTag();
-                    Toast.makeText(context,
-                            "Clicked on Checkbox: " + cb.getText() +
-                                    " is " + cb.isChecked(),
-                            Toast.LENGTH_LONG).show();
                     symptom.setSelected(cb.isChecked());
                 }
             });
@@ -67,10 +63,5 @@ public class SymptomsAdapter extends ArrayAdapter<Symptom> {
 
         return convertView;
 
-    }
-
-
-    private void checkButtonClick() {
-        Toast.makeText(context, "here", Toast.LENGTH_LONG);
     }
 }

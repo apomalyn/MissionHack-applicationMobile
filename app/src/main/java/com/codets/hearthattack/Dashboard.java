@@ -6,8 +6,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -15,7 +22,7 @@ public class Dashboard extends AppCompatActivity {
     private final static int DASHBOARD_FRAGMENT = 1;
     private final static int SETTINGS_FRAGMENT = 1;
 
-    private TextView mTextMessage;
+    private Server server;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -55,6 +62,11 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        server = new Server(5000);
+        server.start();
+
+        Log.d("Test", server.getIpAddress() + ":" + server.getPort());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new DashboardFragment()).commit();
 

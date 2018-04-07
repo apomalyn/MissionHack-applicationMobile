@@ -1,12 +1,10 @@
 package com.codets.hearthattack;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,16 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -130,7 +125,7 @@ public class DiagnosticsFragment extends Fragment {
         if(symptomsList == null){
             try {
                 symptomsList = new ArrayList<>();
-                JSONObject obj = new JSONObject(JSONReader.AssetJSONFile(getContext(), SYMPTOM_LIST_FILENAME));
+                JSONObject obj = JSON.AssetJSONFile(getContext(), SYMPTOM_LIST_FILENAME);
                 JSONObject m_jArry = obj.getJSONObject("symptoms");
                 String key;
 
