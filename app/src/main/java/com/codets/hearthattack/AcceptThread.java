@@ -13,14 +13,14 @@ class AcceptThread extends Thread {
     private static final String TAG = "AcceptThread.java";
     private final BluetoothServerSocket mmServerSocket;
 
-    private ChipListener referee;
+    private ChipListeningService referee;
     private BluetoothAdapter bluetooth;
 
     private final UUID SERVICE_UUID = UUID.fromString("c1c3b6c6-8ca2-4ef2-94e4-805e0f6cfe93");
     private final String SERVICE_NAME = "codets.heartattack";
 
 
-    public AcceptThread( BluetoothAdapter appBluetooth, ChipListener appReferee ) {
+    public AcceptThread( BluetoothAdapter appBluetooth, ChipListeningService appReferee ) {
         this.bluetooth = appBluetooth;
         this.referee = appReferee;
         // Use a temporary object that is later assigned to mmServerSocket

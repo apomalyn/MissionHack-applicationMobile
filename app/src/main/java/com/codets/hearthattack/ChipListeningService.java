@@ -4,23 +4,33 @@ import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
+import android.util.Base64;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.UUID;
+import java.lang.ref.WeakReference;
+
+import static java.util.Arrays.copyOfRange;
 
 
-public class ChipListener {
+public class ChipListeningService extends Handler {
 
-  BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
+  private BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
   private Activity appActivity;
+  private AcceptThread connectionThread;
+  private ManageConnectionThread connectedThread;
 
   int REQUEST_ENABLE_BT = 9001;
 
@@ -40,8 +50,7 @@ public class ChipListener {
         }
     };
 
-
-    ChipListener(Activity app) {
+    ChipListeningService(Activity app) {
       this.appActivity = app;
 
         int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
@@ -49,7 +58,7 @@ public class ChipListener {
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                 MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
 
-        bluetooth.startDiscovery();
+        //bluetooth.startDiscovery();
 
         try {
             initConnection();
@@ -57,36 +66,45 @@ public class ChipListener {
             e.printStackTrace();
         }
 
-
     }
 
-  public void initConnection() throws IOException {
+    @Override
+    public void handleMessage(Message msg) {
+        // make json
+        byte[] bytes = (byte[]) msg.obj;
+        String data = new String(Base64.decode(copyOfRange(bytes, 0, msg.arg1), 0));
+        try {
+            JSONObject json = new JSONObject(data);
+            System.out.println(json.getJSONArray("heartbeats").getInt(0));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+  protected void initConnection() throws IOException {
       // enable bluetooth
       if (!bluetooth.isEnabled()) {
           Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
           appActivity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
       }
 
-      //initDiscovery();
-
-      /*// get previously paired devices
-      Set<BluetoothDevice> pairedDevices = bluetooth.getBondedDevices();
-
-      if (pairedDevices.size() > 0) {
-          for (BluetoothDevice device : pairedDevices) {
-              String deviceName = device.getName();
-              String deviceHardwareAddress = device.getAddress(); // MAC address
-          }
-      }*/
-
       // launch thread looking for a socket
-      AcceptThread connectionThread = new AcceptThread(bluetooth, this);
-      connectionThread.start();
+      connectionThread = new AcceptThread(bluetooth, this);
+      connectionThread.start(); // thread will contact us and kill itself, no need to worry
   }
 
-  public void handleConnectedSocket(BluetoothSocket socket) {
+  protected void handleConnectedSocket(BluetoothSocket socket) {
         System.out.println("CONNECTED SOCKET");
-  }
+        connectionThread.interrupt();
+
+      Looper.prepare();
+
+        // handler to handle other thread messages
+        //IncomingHandler incomingHandler = new IncomingHandler(this);
+        connectedThread = new ManageConnectionThread(socket, this);
+        connectedThread.start();
+    }
+
 
   private void initDiscovery() {
       System.out.println("starting bluetooth discovery");
@@ -122,9 +140,7 @@ public class ChipListener {
         appActivity.unregisterReceiver(broadcastReceiver);
   }
 
-  private void initDeviceListeneing() {}
 
-  private void handleTransmission() {}
 
   private void cleanUp() {
         appActivity.unregisterReceiver(broadcastReceiver);
