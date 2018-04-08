@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from symptom_checker import SymptomChecker
 import requests
 import sqlite3 as sql
@@ -17,9 +17,9 @@ def diagnostic():
         ids  = request.get_json()["ids"]
         diagnostic = diag_checker.ml_diagnostic(ids)[0]
         response = {"diagnostic": diag_checker.id_to_diag(diagnostic)}
-        return json.dumps(response)
+        return jsonify(response)
     except Exception as e:
-        return json.dumps({"error": str(e)})
+        return jsonify({"error": str(e)})
 
 
 @app.route('/register', methods=['POST'])
@@ -53,11 +53,11 @@ def register():
 
                 cursor.execute("UPDATE doctors SET last_updated = CURRENT_TIMESTAMP WHERE identifier = ?", (id,))
                 con.commit()
-                return json.dumps(response)
-            return json.dumps({"error": "Invalid request"}) # yuk, ugly code
-        return json.dumps(response)
+                return jsonify(response)
+            return jsonify({"error": "Invalid request"}) # yuk, ugly code
+        return jsonify(response)
     except Exception as e:
-        return json.dumps({"error": str(e)})
+        return jsonify({"error": str(e)})
 
 
 
@@ -69,10 +69,10 @@ def alert():
             con.row_factory = sql.Row
             cursor = con.cursor()
             cursor.execute("INSERT INTO alerts (location) VALUES(?)", (location,))
-            return json.dumps({"status": "RECEIVED"})
-        return json.dumps({"error": "Error happened."})
+            return jsonify({"status": "RECEIVED"})
+        return jsonify({"error": "Error happened."})
     except Exception as e:
-        return json.dumps({"error": str(e)})
+        return jsonify({"error": str(e)})
 
 
 
