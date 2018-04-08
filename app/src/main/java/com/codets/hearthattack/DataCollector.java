@@ -137,10 +137,10 @@ public class DataCollector {
                 "]}";
 
         String diag = "{'diagnostics': [" +
-                "{'symptoms': [14,65,24,32], 'diag': 24, 'timestamp':'1523153786407', 'correct': 'true'}," +
-                "{'symptoms': [25,65], 'diag': 11, 'timestamp':'1523153845561', 'correct': 'false'}," +
-                "{'symptoms': [14,2,8,65,31,32], 'diag': 12, 'timestamp':'1523153847882', 'correct': 'false'}," +
-                "{'symptoms': [14,7,54,67,21,13,33], 'diag': 8, 'timestamp':'1523153853635', 'correct': 'true'}," +
+                "{'symptoms': [14,65,24,32], 'disease':'rheum', 'diag': 24, 'timestamp':'1523153786407', 'correct': 'true'}," +
+                "{'symptoms': [25,65], 'disease':'Blue waffle', 'diag': 11, 'timestamp':'1523153845561', 'correct': 'false'}," +
+                "{'symptoms': [14,2,8,65,31,32], 'disease':'Black death', 'diag': 12, 'timestamp':'1523153847882', 'correct': 'false'}," +
+                "{'symptoms': [14,7,54,67,21,13,33], 'disease':'Alien in your stomach', 'diag': 8, 'timestamp':'1523153853635', 'correct': 'true'}," +
                 "]}";
 
         try {

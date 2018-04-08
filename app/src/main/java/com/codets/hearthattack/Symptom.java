@@ -1,5 +1,10 @@
 package com.codets.hearthattack;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Symptom {
 
     private int id;
@@ -27,5 +32,16 @@ public class Symptom {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public JSONObject toJSONObject(){
+        JSONObject json = new JSONObject();
+        try{
+            json.put("id", id);
+        }catch (JSONException e){
+            Log.e("JSON", "", e);
+        }
+
+        return json;
     }
 }

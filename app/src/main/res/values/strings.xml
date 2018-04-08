@@ -8,4 +8,8 @@
     <string name="close">Close</string>
     <string name="dialog_diagnostics_no_results_title">Sorry...</string>
     <string name="dialog_diagnostics_no_results">Nothing is found</string>
+    <string name="distress_notification_title">Someone is on distress !</string>
+    <string name="distress_notification_content">Someone need your help at %1$d m. Click for help</string>
+    <string name="channel_name" translatable="false">Emergency new earth</string>
+    <string name="channel_description" translatable="false">Only use when someone is on distress</string>
 </resources>

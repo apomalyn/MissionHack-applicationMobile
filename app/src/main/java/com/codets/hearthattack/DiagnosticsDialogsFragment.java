@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-public class DiseasesDialogsFragment extends DialogFragment {
+public class DiagnosticsDialogsFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class DiseasesDialogsFragment extends DialogFragment {
                     .setItems(diagnostics, null)
                     .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            //SAVE DIAGNOSTICS
+                            //TODO set diagnostic visible
                         }
                     })
                     .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
@@ -40,12 +40,12 @@ public class DiseasesDialogsFragment extends DialogFragment {
         return builder.create();
     }
 
-    public static DiseasesDialogsFragment newInstance(CharSequence[] diagnostics){
-        DiseasesDialogsFragment f = new DiseasesDialogsFragment();
+    public static DiagnosticsDialogsFragment newInstance(CharSequence[] diagnostic){
+        DiagnosticsDialogsFragment f = new DiagnosticsDialogsFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putCharSequenceArray("diagnostics", diagnostics);
+        args.putCharSequenceArray("diagnostics", diagnostic);
         f.setArguments(args);
 
         return f;
