@@ -1,8 +1,10 @@
 package com.codets.hearthattack;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +12,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.Random;
 
 
 /**
@@ -33,6 +42,12 @@ public class DashboardFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private static final Random RANDOM = new Random();
+    private LineGraphSeries<DataPoint> series;
+
+    private final Handler mHandler = new Handler();
+    private Runnable mTimer1;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -73,14 +88,12 @@ public class DashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
+
+        series = new LineGraphSeries<>(generateData());
         graph.addSeries(series);
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);// It will remove the background grids
+
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);// remove horizontal x labels and line
 
         return view;
     }
@@ -95,6 +108,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -121,5 +135,45 @@ public class DashboardFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mTimer1 = new Runnable() {
+            @Override
+            public void run() {
+                series.resetData(generateData());
+                mHandler.postDelayed(this, 1500);
+            }
+        };
+        mHandler.postDelayed(mTimer1, 1500);
+
+    }
+
+    private DataPoint[] generateData() {
+/*
+        DataCollector dc = DataCollector.getInstance();
+        try {
+            JSONArray pulses = dc.getPulses();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        y = */
+        int count =7;
+        DataPoint[] values = new DataPoint[count];
+        Random r = new Random();
+
+        for (int i=0; i<count; i++) {
+            double x = i;
+            int Low = 0;
+            int High = 200;
+            int Result = r.nextInt(High-Low) + Low;
+            double y = Result;
+            DataPoint v = new DataPoint(x, y);
+            values[i] = v;
+        }
+        return values;
     }
 }
