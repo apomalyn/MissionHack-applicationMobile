@@ -43,14 +43,14 @@ public class DataCollector {
 
     }
 
-    public DataCollector getInstance(Context context){
+    public static DataCollector getInstance(Context context){
         if(instance == null){
             instance = new DataCollector(context);
         }
         return instance;
     }
 
-    public DataCollector getInstance(){
+    public static DataCollector getInstance(){
         return instance;
     }
 
