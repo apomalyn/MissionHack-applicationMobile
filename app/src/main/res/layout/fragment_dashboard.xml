@@ -1,9 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
     tools:context=".DashboardFragment">
 
-</FrameLayout>
+<com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="298dp" /><CheckBox
+        android:id="@+id/connectionStatusBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:checked="true"
+        android:duplicateParentState="true"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+    android:layout_marginLeft="24dp" />
+
+    <TextView
+        android:id="@+id/connectionStatusText"
+        android:layout_width="129dp"
+        android:layout_height="22dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Chip disconnected"
+        app:layout_constraintBottom_toBottomOf="@+id/connectionStatusBox"
+        app:layout_constraintStart_toEndOf="@+id/connectionStatusBox"
+        app:layout_constraintTop_toTopOf="@+id/connectionStatusBox"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginLeft="8dp" />
+
+    <ProgressBar
+        android:id="@+id/bluetoothLoading"
+        style="@style/GenericProgressIndicator"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/connectionStatusBox"
+        app:layout_constraintStart_toStartOf="@+id/connectionStatusBox"
+        app:layout_constraintTop_toTopOf="@+id/connectionStatusBox" />
+
+</android.support.constraint.ConstraintLayout>

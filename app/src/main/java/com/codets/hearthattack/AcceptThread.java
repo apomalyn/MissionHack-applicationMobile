@@ -38,6 +38,7 @@ class AcceptThread extends Thread {
     public void run() {
         BluetoothSocket socket = null;
         // Keep listening until exception occurs or a socket is returned.
+        System.out.println("Connection acceptance thread started");
         while (true) {
             try {
                 socket = mmServerSocket.accept();

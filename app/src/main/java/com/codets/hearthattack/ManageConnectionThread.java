@@ -18,7 +18,7 @@ class ManageConnectionThread extends Thread {
     private final OutputStream mmOutStream;
     private byte[] mmBuffer; // mmBuffer store for the stream
 
-    private Handler mainThreadHandler;
+    private ChipListeningService mainThreadHandler;
 
     private interface MessageConstants {
         public static final int MESSAGE_READ = 0;
@@ -27,7 +27,7 @@ class ManageConnectionThread extends Thread {
     }
 
 
-    public ManageConnectionThread(BluetoothSocket socket, Handler refereeThreadHandler) {
+    public ManageConnectionThread(BluetoothSocket socket, ChipListeningService refereeThreadHandler) {
         this.socket = socket;
         this.mainThreadHandler = refereeThreadHandler;
         InputStream tmpIn = null;
@@ -67,6 +67,12 @@ class ManageConnectionThread extends Thread {
                 readMsg.sendToTarget();
             } catch (IOException e) {
                 Log.d(TAG, "Input stream was disconnected", e);
+                Log.d(TAG, "Trying to reconnect");
+                try {
+                    this.mainThreadHandler.initConnection();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 break;
             }
         }

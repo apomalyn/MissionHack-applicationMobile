@@ -1,6 +1,7 @@
 package com.codets.hearthattack;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,8 +14,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +30,11 @@ import static java.util.Arrays.copyOfRange;
 public class ChipListeningService extends Handler {
 
   private BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
-  private Activity appActivity;
+  private AppCompatActivity appActivity;
   private AcceptThread connectionThread;
   private ManageConnectionThread connectedThread;
+
+  private DashboardFragment dashboardFragment;
 
   int REQUEST_ENABLE_BT = 9001;
   int MAXIMUM_HEARTBEAT_ALLOWED = 200;
@@ -51,26 +55,39 @@ public class ChipListeningService extends Handler {
         }
     };
 
-    ChipListeningService(Activity app) {
+    ChipListeningService(AppCompatActivity app) {
       this.appActivity = app;
 
-        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
-        ActivityCompat.requestPermissions(appActivity,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+      System.out.println("ChipListeningService");
+
+        int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+        ActivityCompat.requestPermissions(this.appActivity,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
         //bluetooth.startDiscovery();
+        tryConnection();
 
+    }
+
+    public void tryConnection() {
+        System.out.println("trying to connect");
         try {
             initConnection();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void handleMessage(Message msg) {
+
+        for (Fragment fragment: this.appActivity.getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof DashboardFragment) {
+                ((DashboardFragment) fragment).hideLoader();
+            }
+        }
+
         // make json
         byte[] bytes = (byte[]) msg.obj;
         String data = new String(Base64.decode(copyOfRange(bytes, 0, msg.arg1), 0));
@@ -113,6 +130,13 @@ public class ChipListeningService extends Handler {
 
       // launch thread looking for a socket
       connectionThread = new AcceptThread(bluetooth, this);
+        for (Fragment fragment: this.appActivity.getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof DashboardFragment) {
+                ((DashboardFragment) fragment).showLoader();
+            }
+        }
+
+      System.out.println("starting connection thread ? ");
       connectionThread.start(); // thread will contact us and kill itself, no need to worry
   }
 
@@ -126,6 +150,7 @@ public class ChipListeningService extends Handler {
         //IncomingHandler incomingHandler = new IncomingHandler(this);
         connectedThread = new ManageConnectionThread(socket, this);
         connectedThread.start();
+
     }
 
 
