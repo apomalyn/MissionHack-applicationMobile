@@ -3,10 +3,10 @@ package com.codets.hearthattack;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +38,7 @@ public class DiagnosticsFragment extends Fragment {
 
     private static ArrayList<Symptom> symptomsList = null;
     private static SymptomsAdapter symptomsAdapter = null;
-    private static ArrayList<Symptom> currentSymptom;
+    private static ArrayList<Symptom> currentSymptoms;
 
     private View view;
     private ListView listView = null;
@@ -46,7 +46,7 @@ public class DiagnosticsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public DiagnosticsFragment() {
-        currentSymptom = new ArrayList<>();
+        currentSymptoms = new ArrayList<>();
     }
 
     /**
@@ -85,20 +85,29 @@ public class DiagnosticsFragment extends Fragment {
                 fab.setEnabled(false);
                 view.findViewById(R.id.loading_panel).setVisibility(View.VISIBLE);
 
-//                JSONObject response = HttpClient.sendRequest(HttpClient.DIAGNOSTICS_REQUEST, )
+                JSONObject response = HttpClient.sendRequest(HttpClient.DIAGNOSTICS_REQUEST, JSON.convertArrayList(currentSymptoms));
 
-                //DELETE AFTER SERVER IN PLACE
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        fab.setEnabled(true);
-                        view.findViewById(R.id.loading_panel).setVisibility(View.GONE);
-                        CharSequence[] diagnostics = {"Grippe", "Cancer", "Tu as vu le film Alien ?"};
-                        DialogFragment dialog = DiseasesDialogsFragment.newInstance(diagnostics);
-                        dialog.show(getActivity().getSupportFragmentManager(), "DiagnosticsDialog");
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                fab.setEnabled(true);
+                view.findViewById(R.id.loading_panel).setVisibility(View.GONE);
+
+                DialogFragment dialog;
+                if(response == null){
+                    dialog = DiagnosticsDialogsFragment.newInstance(null);
+                }else{
+                    try{
+                        DataCollector.getInstance().saveDiagnostic(response);
+                    }catch (JSONException e){
+                        Log.e("Diagnostics", "Failed to save diagnostic", e);
+                    }catch (IOException e){
+                        Log.e("Diagnostics", "Failed to save diagnostic", e);
                     }
-                }, 5000);   //5 seconds
+
+                    CharSequence[] diagnostics = JSON.convertToCharSequenceWithoutKeys(response);
+                    dialog = DiagnosticsDialogsFragment.newInstance(diagnostics);
+                }
+
+                dialog.show(getActivity().getSupportFragmentManager(), "DiagnosticsDialog");
             }
         });
 
@@ -176,7 +185,7 @@ public class DiagnosticsFragment extends Fragment {
                                     int position, long id) {
                 // When clicked, show a toast with the TextView text
                 Symptom symptom= (Symptom) parent.getItemAtPosition(position);
-                currentSymptom.add(symptom);
+                currentSymptoms.add(symptom);
             }
         });
 

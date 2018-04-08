@@ -20,9 +20,9 @@ public class HttpClient {
     private final static String URL = "http://159.89.112.179:5000";
 
     public final static String REGISTER_REQUEST = "/register";
-    public final static String DIAGNOSTICS_REQUEST = "";
+    public final static String DIAGNOSTICS_REQUEST = "/diagnostic";
 
-    public final static String EMERGENCY_REQUEST = "";
+    public final static String EMERGENCY_REQUEST = "/emergency";
 
     public static JSONObject sendRequest(String method, JSONObject parameters) {
         try{

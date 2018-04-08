@@ -66,6 +66,8 @@ public class Dashboard extends AppCompatActivity {
         emergencyService = new EmergencyService();
         emergencyService.start();
 
+        DataCollector.getInstance(getApplicationContext());
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new DashboardFragment()).commit();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

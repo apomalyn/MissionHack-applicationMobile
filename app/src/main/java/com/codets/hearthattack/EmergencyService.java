@@ -32,7 +32,8 @@ public class EmergencyService implements Runnable {
             try{
                 Thread.sleep(DELAY);
                 Log.d(TAG, "EMERGENCY CHECK SEND");
-                HttpClient.sendRequest(HttpClient.REGISTER_REQUEST, requestParameters);
+                JSONObject response = HttpClient.sendRequest(HttpClient.REGISTER_REQUEST, requestParameters);
+                //TODO Check response and display notif is necessary
             }catch (InterruptedException e){
                 Log.e(TAG, "", e);
             }
