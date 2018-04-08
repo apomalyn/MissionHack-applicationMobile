@@ -16,6 +16,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
@@ -104,6 +108,7 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_dashboard);
 
         emergencyService = new EmergencyService(0, getApplicationContext());
@@ -118,6 +123,8 @@ public class Dashboard extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_dashboard);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
     }
 
 }
