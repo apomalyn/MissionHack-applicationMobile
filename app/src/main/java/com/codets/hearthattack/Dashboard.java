@@ -22,7 +22,7 @@ public class Dashboard extends AppCompatActivity {
     private final static int DASHBOARD_FRAGMENT = 1;
     private final static int SETTINGS_FRAGMENT = 1;
 
-    private Server server;
+    private EmergencyService emergencyService;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -63,10 +63,8 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        server = new Server(5000);
-        server.start();
-
-        Log.d("Test", server.getIpAddress() + ":" + server.getPort());
+        emergencyService = new EmergencyService();
+        emergencyService.start();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new DashboardFragment()).commit();
 

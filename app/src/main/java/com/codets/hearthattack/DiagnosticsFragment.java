@@ -80,11 +80,12 @@ public class DiagnosticsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Send data to search disease
                 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 fab.setEnabled(false);
                 view.findViewById(R.id.loading_panel).setVisibility(View.VISIBLE);
+
+//                JSONObject response = HttpClient.sendRequest(HttpClient.DIAGNOSTICS_REQUEST, )
 
                 //DELETE AFTER SERVER IN PLACE
                 Handler handler = new Handler();

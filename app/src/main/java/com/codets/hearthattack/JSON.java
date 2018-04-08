@@ -21,9 +21,11 @@ public class JSON {
         return new JSONObject(new String(formArray));
     }
 
-    public static void addInJSONFileAsset(Context context, String filename, JSONObject json){
+    public static JSONObject readInputStream(InputStream inputStream) throws IOException, JSONException{
+        byte[] inputConvert = new byte[inputStream.available()];
+        inputStream.read(inputConvert);
+        inputStream.close();
 
+        return new JSONObject(new String(inputConvert));
     }
-
-
 }
