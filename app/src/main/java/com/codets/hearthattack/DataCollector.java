@@ -60,7 +60,11 @@ public class DataCollector {
         writeToFile(this.PULSES_FILE_NAME, newJsonString);
     }
 
-    public void saveDiagnostic() {}
+    public void saveDiagnostic(JSONObject newDiagnostic) throws IOException, JSONException {
+        JSONArray newDiagnosticsArray = getDiagnostics().put(newDiagnostic);
+        String newJsonString = "{\"diagnostics\":"+ newDiagnosticsArray.toString() +"}";
+        writeToFile(this.DIAGNOSTICS_FILE_NAME, newJsonString);
+    }
 
     public JSONArray getPulses() throws JSONException {
         String jsonString = "Couldn't parse to json";
