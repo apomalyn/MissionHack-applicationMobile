@@ -124,6 +124,8 @@ public class Dashboard extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.navigation_dashboard);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        new ChipListeningService(this);
+
 
     }
 
