@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
@@ -42,6 +43,8 @@ public class DashboardFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private View view;
 
     private static final Random RANDOM = new Random();
     private LineGraphSeries<DataPoint> series;
@@ -85,8 +88,8 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-
+        this.view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        this.showLoader();
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
 
         series = new LineGraphSeries<>(generateData());
@@ -95,7 +98,7 @@ public class DashboardFragment extends Fragment {
 
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);// remove horizontal x labels and line
 
-        return view;
+        return this.view;
     }
 
     /*// TODO: Rename method, update argument and hook method into UI event
@@ -120,6 +123,23 @@ public class DashboardFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void showLoader() {
+
+        this.view.findViewById(R.id.bluetoothLoading).setVisibility(View.VISIBLE);
+        this.view.findViewById(R.id.connectionStatusBox).setVisibility(View.INVISIBLE);
+        this.view.findViewById(R.id.connectionStatusBox).setClickable(false);
+        ((TextView) this.view.findViewById(R.id.connectionStatusText)).setText("Chip Disconnected");
+
+    }
+
+    public void hideLoader() {
+        this.view.findViewById(R.id.bluetoothLoading).setVisibility(View.INVISIBLE);
+        this.view.findViewById(R.id.connectionStatusBox).setVisibility(View.VISIBLE);
+        ((TextView) this.view.findViewById(R.id.connectionStatusText)).setText("Chip Connected");
+
+
     }
 
     /**
