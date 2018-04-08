@@ -129,11 +129,11 @@ public class DataCollector {
     private void seed() {
 
         String pulses = "{'pulses': [" +
-                "{'heartbeat': '150', 'systolic': '80', 'diastelic': '110'}," +
-                "{'heartbeat': '145', 'systolic': '79', 'diastelic': '108'}," +
-                "{'heartbeat': '148', 'systolic': '80', 'diastelic': '107'}," +
-                "{'heartbeat': '146', 'systolic': '80', 'diastelic': '108'}," +
-                "{'heartbeat': '149', 'systolic': '81', 'diastelic': '107'}" +
+                "{'heartbeat': '150', 'systolic': '80', 'diastolic': '110'}," +
+                "{'heartbeat': '145', 'systolic': '79', 'diastolic': '108'}," +
+                "{'heartbeat': '148', 'systolic': '80', 'diastolic': '107'}," +
+                "{'heartbeat': '146', 'systolic': '80', 'diastolic': '108'}," +
+                "{'heartbeat': '149', 'systolic': '81', 'diastolic': '107'}" +
                 "]}";
 
         String diag = "{'diagnostics': [" +

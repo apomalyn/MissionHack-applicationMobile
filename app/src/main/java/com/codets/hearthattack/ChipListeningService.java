@@ -33,6 +33,7 @@ public class ChipListeningService extends Handler {
   private ManageConnectionThread connectedThread;
 
   int REQUEST_ENABLE_BT = 9001;
+  int MAXIMUM_HEARTBEAT_ALLOWED = 200;
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -75,10 +76,32 @@ public class ChipListeningService extends Handler {
         String data = new String(Base64.decode(copyOfRange(bytes, 0, msg.arg1), 0));
         try {
             JSONObject json = new JSONObject(data);
-            System.out.println(json.getJSONArray("heartbeats").getInt(0));
+            System.out.println(json.toString());
+
+            // check if the json has valid parameters
+            json.getInt("heartbeat");
+            json.getInt("systolic");
+            json.getInt("diastolic");
+
+            // check if the heartbeat is worth ringing a bell
+            //if (json.getInt("heartbeat") > this.MAXIMUM_HEARTBEAT_ALLOWED )
+
+            try {
+                DataCollector.getInstance(this.appActivity.getApplicationContext())
+                        .savePulse(json);
+
+            } catch (IOException e) {
+                System.out.println("Received input from chip but could'nt write to fs");
+                e.printStackTrace();
+            }
+
+
         } catch (JSONException e) {
+            System.out.println("Received input from chip but could'nt parse data to json");
             e.printStackTrace();
         }
+
+
     }
 
   protected void initConnection() throws IOException {
