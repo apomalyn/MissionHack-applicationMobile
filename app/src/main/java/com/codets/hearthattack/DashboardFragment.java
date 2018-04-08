@@ -90,7 +90,6 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         this.view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         this.showLoader();
-        return this.view;
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
 
         series = new LineGraphSeries<>(generateData());
@@ -99,7 +98,7 @@ public class DashboardFragment extends Fragment {
 
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);// remove horizontal x labels and line
 
-        return view;
+        return this.view;
     }
 
     /*// TODO: Rename method, update argument and hook method into UI event
