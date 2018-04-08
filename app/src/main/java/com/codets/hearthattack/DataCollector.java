@@ -23,7 +23,9 @@ public class DataCollector {
     private final String TAG = "DataCollector.java";
     private Context fsContext;
 
-    DataCollector(Context context) {
+    private static DataCollector instance = null;
+
+    private DataCollector(Context context) {
         File pulses = new File(context.getFilesDir(), PULSES_FILE_NAME);
         File diagnostics = new File(context.getFilesDir(), DIAGNOSTICS_FILE_NAME);
 
@@ -39,6 +41,17 @@ public class DataCollector {
 
             this.seed();
 
+    }
+
+    public DataCollector getInstance(Context context){
+        if(instance == null){
+            instance = new DataCollector(context);
+        }
+        return instance;
+    }
+
+    public DataCollector getInstance(){
+        return instance;
     }
 
     public void savePulse(JSONObject newPulse) throws IOException, JSONException {
