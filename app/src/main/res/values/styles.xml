@@ -20,4 +20,8 @@
         <item name="android:indeterminate">true</item>
     </style>
 
+    <style name="SelfSelect" parent="Theme.Leanback.Onboarding">
+        <item name="android:background">#00838f</item>
+    </style>
+
 </resources>

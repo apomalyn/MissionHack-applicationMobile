@@ -12,4 +12,5 @@
     <string name="distress_notification_content">Someone need your help at %1$d m. Click for help</string>
     <string name="channel_name" translatable="false">Emergency new earth</string>
     <string name="channel_description" translatable="false">Only use when someone is on distress</string>
+    <string name="welcome_content">test</string>
 </resources>
