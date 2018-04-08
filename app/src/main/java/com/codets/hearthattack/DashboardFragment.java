@@ -126,9 +126,9 @@ public class DashboardFragment extends Fragment {
     }
 
     public void showLoader() {
-
         this.view.findViewById(R.id.bluetoothLoading).setVisibility(View.VISIBLE);
         this.view.findViewById(R.id.connectionStatusBox).setVisibility(View.INVISIBLE);
+        this.view.findViewById(R.id.graph).setVisibility(View.INVISIBLE);
         this.view.findViewById(R.id.connectionStatusBox).setClickable(false);
         ((TextView) this.view.findViewById(R.id.connectionStatusText)).setText("Chip Disconnected");
 
@@ -136,6 +136,7 @@ public class DashboardFragment extends Fragment {
 
     public void hideLoader() {
         this.view.findViewById(R.id.bluetoothLoading).setVisibility(View.INVISIBLE);
+        this.view.findViewById(R.id.graph).setVisibility(View.VISIBLE);
         this.view.findViewById(R.id.connectionStatusBox).setVisibility(View.VISIBLE);
         ((TextView) this.view.findViewById(R.id.connectionStatusText)).setText("Chip Connected");
 
