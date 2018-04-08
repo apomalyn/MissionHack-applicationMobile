@@ -9,4 +9,6 @@
     <string name="close">Fermer</string>
     <string name="dialog_diagnostics_no_results_title">Desole...</string>
     <string name="dialog_diagnostics_no_results">Rien n\'est trouve</string>
+    <string name="distress_notification_title">Quelqu\'un a besoin d\'aide ! Clique pour aider</string>
+    <string name="distress_notification_content">Quelqu\'un a besoin de votre aide a %1$d m.</string>
 </resources>
